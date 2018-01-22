@@ -1,6 +1,5 @@
 package dao;
 
-import entity.Contacts;
 import entity.UserProj;
 
 import java.util.List;

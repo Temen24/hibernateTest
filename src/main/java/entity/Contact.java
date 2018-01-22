@@ -1,11 +1,11 @@
 package entity;
 
-public class Contacts {
+public class Contact {
     private int id;
     private String phone;
     private String vkUrl;
 
-    public Contacts(){
+    public Contact(){
 
     }
 
@@ -38,11 +38,11 @@ public class Contacts {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Contacts contacts = (Contacts) o;
+        Contact contact = (Contact) o;
 
-        if (id != contacts.id) return false;
-        if (phone != null ? !phone.equals(contacts.phone) : contacts.phone != null) return false;
-        return vkUrl != null ? vkUrl.equals(contacts.vkUrl) : contacts.vkUrl == null;
+        if (id != contact.id) return false;
+        if (phone != null ? !phone.equals(contact.phone) : contact.phone != null) return false;
+        return vkUrl != null ? vkUrl.equals(contact.vkUrl) : contact.vkUrl == null;
     }
 
     @Override
@@ -55,7 +55,7 @@ public class Contacts {
 
     @Override
     public String toString() {
-        return "Contacts{" +
+        return "Contact{" +
                 "id=" + id +
                 ", phone='" + phone + '\'' +
                 ", vkUrl='" + vkUrl + '\'' +

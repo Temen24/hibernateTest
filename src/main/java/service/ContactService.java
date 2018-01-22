@@ -1,27 +1,27 @@
 package service;
 
 import business_logic.Util;
-import dao.ContactsDAO;
-import entity.Contacts;
+import dao.ContactDAO;
+import entity.Contact;
 import logger.CustomLog;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContactsService extends Util implements ContactsDAO {
+public class ContactService extends Util implements ContactDAO {
 
     Connection connection = getConnection();
 
     @Override
-    public void add(Contacts contacts) throws SQLException {
+    public void add(Contact contact) throws SQLException {
         PreparedStatement ps = null;
-        String sql = "INSERT INTO CONTACTS (ID, PHONE, VK_URL) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO CONTACT (ID, PHONE, VK_URL) VALUES (?, ?, ?)";
         try {
             ps = connection.prepareStatement(sql);
-            ps.setInt(1, contacts.getId());
-            ps.setString(2, contacts.getPhone());
-            ps.setString(3, contacts.getVkUrl());
+            ps.setInt(1, contact.getId());
+            ps.setString(2, contact.getPhone());
+            ps.setString(3, contact.getVkUrl());
             ps.executeUpdate();
         } catch (SQLException e) {
             CustomLog.log("Add contact error", e);
@@ -37,19 +37,19 @@ public class ContactsService extends Util implements ContactsDAO {
     }
 
     @Override
-    public List<Contacts> getAll() throws SQLException {
-        List<Contacts> contactsList = new ArrayList<>();
-        String sql = "SELECT ID, PHONE, VK_URL FROM CONTACTS";
+    public List<Contact> getAll() throws SQLException {
+        List<Contact> contactList = new ArrayList<>();
+        String sql = "SELECT ID, PHONE, VK_URL FROM CONTACT";
         Statement statement = null;
         try{
             statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             while(resultSet.next()){
-                Contacts contact = new Contacts();
+                Contact contact = new Contact();
                 contact.setId(resultSet.getInt("ID"));
                 contact.setPhone(resultSet.getString("PHONE"));
                 contact.setVkUrl(resultSet.getString("VK_URL"));
-                contactsList.add(contact);
+                contactList.add(contact);
             }
         } catch (SQLException e) {
             CustomLog.log("Get all contacts error", e);
@@ -62,14 +62,14 @@ public class ContactsService extends Util implements ContactsDAO {
                 connection.close();
             }
         }
-        return contactsList;
+        return contactList;
     }
 
     @Override
-    public Contacts getById(int id) throws SQLException {
+    public Contact getById(int id) throws SQLException {
         PreparedStatement ps = null;
-        String sql = "SELECT ID, PHONE, VK_URL FROM CONTACTS WHERE ID=?";
-        Contacts contact = new Contacts();
+        String sql = "SELECT ID, PHONE, VK_URL FROM CONTACT WHERE ID=?";
+        Contact contact = new Contact();
         try {
             ps = connection.prepareStatement(sql);
             ps.setInt(1, id);
@@ -96,9 +96,9 @@ public class ContactsService extends Util implements ContactsDAO {
     }
 
     @Override
-    public void update(Contacts contact) throws SQLException {
+    public void update(Contact contact) throws SQLException {
         PreparedStatement ps = null;
-        String sql = "UPDATE CONTACTS SET PHONE=?, VK_URL=? WHERE ID=?";
+        String sql = "UPDATE CONTACT SET PHONE=?, VK_URL=? WHERE ID=?";
         try {
             ps = connection.prepareStatement(sql);
 
@@ -121,9 +121,9 @@ public class ContactsService extends Util implements ContactsDAO {
     }
 
     @Override
-    public void delete(Contacts contact) throws SQLException {
+    public void delete(Contact contact) throws SQLException {
         PreparedStatement ps = null;
-        String sql = "DELETE FROM CONTACTS WHERE ID=?";
+        String sql = "DELETE FROM CONTACT WHERE ID=?";
         try {
             ps = connection.prepareStatement(sql);
             ps.setInt(1, contact.getId());

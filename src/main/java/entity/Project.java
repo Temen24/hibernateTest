@@ -1,11 +1,11 @@
 package entity;
 
-public class Projects {
+public class Project {
 
     private int id;
     private String title;
 
-    public Projects(){
+    public Project(){
 
     }
 
@@ -30,10 +30,10 @@ public class Projects {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Projects projects = (Projects) o;
+        Project project = (Project) o;
 
-        if (id != projects.id) return false;
-        return title != null ? title.equals(projects.title) : projects.title == null;
+        if (id != project.id) return false;
+        return title != null ? title.equals(project.title) : project.title == null;
     }
 
     @Override
@@ -45,7 +45,7 @@ public class Projects {
 
     @Override
     public String toString() {
-        return "Projects{" +
+        return "Project{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 '}';

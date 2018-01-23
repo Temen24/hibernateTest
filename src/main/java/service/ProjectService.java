@@ -88,7 +88,7 @@ public class ProjectService extends Util implements ProjectDAO {
 
             ps.executeUpdate();
         } catch (SQLException e) {
-            CustomLog.log("Get project error", e);
+            CustomLog.log("Update project error", e);
             e.printStackTrace();
         } finally {
             closeConnections(ps, connection);
@@ -104,7 +104,7 @@ public class ProjectService extends Util implements ProjectDAO {
             ps.setInt(1, project.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
-            CustomLog.log("Get project error", e);
+            CustomLog.log("Delete project error", e);
             e.printStackTrace();
         } finally {
             closeConnections(ps, connection);

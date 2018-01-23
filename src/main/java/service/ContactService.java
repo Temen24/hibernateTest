@@ -82,7 +82,7 @@ public class ContactService extends Util implements ContactDAO {
 
 //            ps.executeUpdate();
         } catch (SQLException e) {
-            CustomLog.log("Get all contacts error", e);
+            CustomLog.log("Get contact error", e);
             e.printStackTrace();
         } finally {
             if(ps != null) {
@@ -129,7 +129,7 @@ public class ContactService extends Util implements ContactDAO {
             ps.setInt(1, contact.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
-            CustomLog.log("Update contacts error", e);
+            CustomLog.log("Delete contact error", e);
             e.printStackTrace();
         } finally {
             if(ps != null) {

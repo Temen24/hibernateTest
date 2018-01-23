@@ -1,33 +1,29 @@
 package service;
 
 import business_logic.Util;
-import dao.UserDAO;
-import entity.User;
+import dao.UserProjDAO;
+import entity.UserProj;
 import logger.CustomLog;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserService extends Util implements UserDAO {
+public class UserProjService extends Util implements UserProjDAO {
 
     Connection connection = getConnection();
 
     @Override
-    public void add(User user) {
+    public void add(UserProj userProj) {
         PreparedStatement ps = null;
-        String sql = "INSERT INTO USER (ID, NAME, OS, BIRTHDAY) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO USER_PROJ (USER_ID, PROJ_ID) VALUES (?, ?)";
         try {
             ps = connection.prepareStatement(sql);
-
-            ps.setInt(1, user.getId());
-            ps.setString(2, user.getName());
-            ps.setString(3, user.getOs());
-            ps.setDate(4, user.getBirthday());
-
+            ps.setInt(1, userProj.getUserID());
+            ps.setInt(2, userProj.getProjID());
             ps.executeUpdate();
         } catch (SQLException e) {
-            CustomLog.log("Add user error", e);
+            CustomLog.log("Add user_proj error", e);
             e.printStackTrace();
         } finally {
             closeConnections(ps, connection);
@@ -35,69 +31,64 @@ public class UserService extends Util implements UserDAO {
     }
 
     @Override
-    public List<User> getAll() {
-        List<User> userList = new ArrayList<>();
-        String sql = "SELECT ID, NAME, OS, BIRTHDAY FROM USER";
+    public List<UserProj> getAll() {
+        List<UserProj> userProjList = new ArrayList<>();
+        String sql = "SELECT USER_ID, PROJ_ID FROM USER_PROJ";
         Statement statement = null;
         try {
             statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
-                User user = new User();
-                user.setId(resultSet.getInt("ID"));
-                user.setName(resultSet.getString("NAME"));
-                user.setOs(resultSet.getString("OS"));
-                user.setBirthday(resultSet.getDate("BIRTHDAY"));
-                userList.add(user);
+                UserProj userProj = new UserProj();
+                userProj.setUserID(resultSet.getInt("USER_ID"));
+                userProj.setProjID(resultSet.getInt("PROJ_ID"));
+                userProjList.add(userProj);
             }
         } catch (SQLException e) {
-            CustomLog.log("Get all users error", e);
+            CustomLog.log("Get all user_proj error", e);
             e.printStackTrace();
         } finally {
             closeConnections(statement, connection);
         }
-        return userList;
+        return userProjList;
     }
 
     @Override
-    public User getById(int id) {
+    public UserProj getByUserIdAndProjectId(int userId, int projId) {
         PreparedStatement ps = null;
-        String sql = "SELECT ID, NAME, OS, BIRTHDAY FROM USER WHERE ID=?";
-        User user = new User();
+        UserProj userProj = new UserProj();
+        String sql = "SELECT USER_ID, PROJ_ID FROM USER_PROJ WHERE USER_ID=? AND PROJ_ID=?";
         try {
             ps = connection.prepareStatement(sql);
-            ps.setInt(1, id);
+            ps.setInt(1, userId);
+            ps.setInt(2, projId);
 
             ResultSet resultSet = ps.executeQuery();
 
-            user.setId(resultSet.getInt("ID"));
-            user.setName(resultSet.getString("NAME"));
-            user.setOs(resultSet.getString("OS"));
-            user.setBirthday(resultSet.getDate("BIRTHDAY"));
+            userProj.setUserID(resultSet.getInt("USER_ID"));
+            userProj.setProjID(resultSet.getInt("PROJ_ID"));
         } catch (SQLException e) {
-            CustomLog.log("Get user error", e);
+            CustomLog.log("Get user_proj error", e);
             e.printStackTrace();
         } finally {
             closeConnections(ps, connection);
         }
-        return user;
+        return userProj;
     }
 
     @Override
-    public void update(User user) {
+    public void update(UserProj userProj) {
         PreparedStatement ps = null;
-        String sql = "UPDATE USER SET NAME=?, OS=?, BIRTHDAY=? WHERE ID=?";
-        try{
+        String sql = "UPDATE USER_PROJ SET USER_ID=?, PROJ_ID=?";
+        try {
             ps = connection.prepareStatement(sql);
 
-            ps.setString(1, user.getName());
-            ps.setString(2, user.getOs());
-            ps.setDate(3, user.getBirthday());
-            ps.setInt(4, user.getId());
+            ps.setInt(1, userProj.getUserID());
+            ps.setInt(2, userProj.getProjID());
 
             ps.executeUpdate();
         } catch (SQLException e) {
-            CustomLog.log("Update user error", e);
+            CustomLog.log("Update user_proj error", e);
             e.printStackTrace();
         } finally {
             closeConnections(ps, connection);
@@ -105,15 +96,18 @@ public class UserService extends Util implements UserDAO {
     }
 
     @Override
-    public void delete(User user) {
+    public void delete(UserProj userProj) {
         PreparedStatement ps = null;
-        String sql = "DELETE FROM USER WHERE ID=?";
-        try{
+        String sql = "DELETE FROM USER_PROJ WHERE  USER_ID=? AND PROJ_ID=?";
+        try {
             ps = connection.prepareStatement(sql);
-            ps.setInt(1, user.getId());
+
+            ps.setInt(1, userProj.getUserID());
+            ps.setInt(2, userProj.getProjID());
+
             ps.executeUpdate();
         } catch (SQLException e) {
-            CustomLog.log("Delete user error", e);
+            CustomLog.log("Remove from user_proj error", e);
             e.printStackTrace();
         } finally {
             closeConnections(ps, connection);

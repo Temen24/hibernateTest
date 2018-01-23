@@ -11,7 +11,7 @@ import java.util.List;
 
 public class UserService extends Util implements UserDAO {
 
-    Connection connection = getConnection();
+    private Connection connection = getConnection();
 
     @Override
     public void add(User user) {
@@ -28,7 +28,6 @@ public class UserService extends Util implements UserDAO {
             ps.executeUpdate();
         } catch (SQLException e) {
             CustomLog.log("Add user error", e);
-            e.printStackTrace();
         } finally {
             closeConnections(ps, connection);
         }
@@ -52,7 +51,6 @@ public class UserService extends Util implements UserDAO {
             }
         } catch (SQLException e) {
             CustomLog.log("Get all users error", e);
-            e.printStackTrace();
         } finally {
             closeConnections(statement, connection);
         }
@@ -76,7 +74,6 @@ public class UserService extends Util implements UserDAO {
             user.setBirthday(resultSet.getDate("BIRTHDAY"));
         } catch (SQLException e) {
             CustomLog.log("Get user error", e);
-            e.printStackTrace();
         } finally {
             closeConnections(ps, connection);
         }
@@ -87,7 +84,7 @@ public class UserService extends Util implements UserDAO {
     public void update(User user) {
         PreparedStatement ps = null;
         String sql = "UPDATE USER SET NAME=?, OS=?, BIRTHDAY=? WHERE ID=?";
-        try{
+        try {
             ps = connection.prepareStatement(sql);
 
             ps.setString(1, user.getName());
@@ -98,7 +95,6 @@ public class UserService extends Util implements UserDAO {
             ps.executeUpdate();
         } catch (SQLException e) {
             CustomLog.log("Update user error", e);
-            e.printStackTrace();
         } finally {
             closeConnections(ps, connection);
         }
@@ -108,19 +104,18 @@ public class UserService extends Util implements UserDAO {
     public void delete(User user) {
         PreparedStatement ps = null;
         String sql = "DELETE FROM USER WHERE ID=?";
-        try{
+        try {
             ps = connection.prepareStatement(sql);
             ps.setInt(1, user.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
             CustomLog.log("Delete user error", e);
-            e.printStackTrace();
         } finally {
             closeConnections(ps, connection);
         }
     }
 
-    public void closeConnections(PreparedStatement ps, Connection connection) {
+    private void closeConnections(PreparedStatement ps, Connection connection) {
         if (ps != null) {
             try {
                 ps.close();
@@ -137,7 +132,7 @@ public class UserService extends Util implements UserDAO {
         }
     }
 
-    public void closeConnections(Statement statement, Connection connection) {
+    private void closeConnections(Statement statement, Connection connection) {
         if (statement != null) {
             try {
                 statement.close();

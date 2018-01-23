@@ -11,10 +11,10 @@ import java.util.List;
 
 public class ProjectService extends Util implements ProjectDAO {
 
-    Connection connection = getConnection();
+    private Connection connection = getConnection();
 
     @Override
-    public void add(Project project) throws SQLException {
+    public void add(Project project) {
         PreparedStatement ps = null;
         String sql = "INSERT INTO PROJECT (ID, TITLE) VALUES (?, ?)";
         try {
@@ -24,14 +24,13 @@ public class ProjectService extends Util implements ProjectDAO {
             ps.executeUpdate();
         } catch (SQLException e) {
             CustomLog.log("Add project error", e);
-            e.printStackTrace();
         } finally {
             closeConnections(ps, connection);
         }
     }
 
     @Override
-    public List<Project> getAll() throws SQLException {
+    public List<Project> getAll() {
         List<Project> projectList = new ArrayList<>();
         String sql = "SELECT ID, TITLE FROM PROJECT";
         Statement statement = null;
@@ -47,7 +46,6 @@ public class ProjectService extends Util implements ProjectDAO {
             }
         } catch (SQLException e) {
             CustomLog.log("Get all projects error", e);
-            e.printStackTrace();
         } finally {
             closeConnections(statement, connection);
         }
@@ -69,7 +67,6 @@ public class ProjectService extends Util implements ProjectDAO {
             project.setTitle((resultSet.getString("TITLE")));
         } catch (SQLException e) {
             CustomLog.log("Get project error", e);
-            e.printStackTrace();
         } finally {
             closeConnections(ps, connection);
         }
@@ -89,7 +86,6 @@ public class ProjectService extends Util implements ProjectDAO {
             ps.executeUpdate();
         } catch (SQLException e) {
             CustomLog.log("Update project error", e);
-            e.printStackTrace();
         } finally {
             closeConnections(ps, connection);
         }
@@ -105,13 +101,12 @@ public class ProjectService extends Util implements ProjectDAO {
             ps.executeUpdate();
         } catch (SQLException e) {
             CustomLog.log("Delete project error", e);
-            e.printStackTrace();
         } finally {
             closeConnections(ps, connection);
         }
     }
 
-    public void closeConnections(PreparedStatement ps, Connection connection) {
+    private void closeConnections(PreparedStatement ps, Connection connection) {
         if (ps != null) {
             try {
                 ps.close();
@@ -128,7 +123,7 @@ public class ProjectService extends Util implements ProjectDAO {
         }
     }
 
-    public void closeConnections(Statement statement, Connection connection) {
+    private void closeConnections(Statement statement, Connection connection) {
         if (statement != null) {
             try {
                 statement.close();

@@ -11,7 +11,7 @@ import java.util.List;
 
 public class UserProjService extends Util implements UserProjDAO {
 
-    Connection connection = getConnection();
+    private Connection connection = getConnection();
 
     @Override
     public void add(UserProj userProj) {
@@ -24,7 +24,6 @@ public class UserProjService extends Util implements UserProjDAO {
             ps.executeUpdate();
         } catch (SQLException e) {
             CustomLog.log("Add user_proj error", e);
-            e.printStackTrace();
         } finally {
             closeConnections(ps, connection);
         }
@@ -46,7 +45,6 @@ public class UserProjService extends Util implements UserProjDAO {
             }
         } catch (SQLException e) {
             CustomLog.log("Get all user_proj error", e);
-            e.printStackTrace();
         } finally {
             closeConnections(statement, connection);
         }
@@ -69,7 +67,6 @@ public class UserProjService extends Util implements UserProjDAO {
             userProj.setProjID(resultSet.getInt("PROJ_ID"));
         } catch (SQLException e) {
             CustomLog.log("Get user_proj error", e);
-            e.printStackTrace();
         } finally {
             closeConnections(ps, connection);
         }
@@ -89,7 +86,6 @@ public class UserProjService extends Util implements UserProjDAO {
             ps.executeUpdate();
         } catch (SQLException e) {
             CustomLog.log("Update user_proj error", e);
-            e.printStackTrace();
         } finally {
             closeConnections(ps, connection);
         }
@@ -108,13 +104,12 @@ public class UserProjService extends Util implements UserProjDAO {
             ps.executeUpdate();
         } catch (SQLException e) {
             CustomLog.log("Remove from user_proj error", e);
-            e.printStackTrace();
         } finally {
             closeConnections(ps, connection);
         }
     }
 
-    public void closeConnections(PreparedStatement ps, Connection connection) {
+    private void closeConnections(PreparedStatement ps, Connection connection) {
         if (ps != null) {
             try {
                 ps.close();
@@ -131,7 +126,7 @@ public class UserProjService extends Util implements UserProjDAO {
         }
     }
 
-    public void closeConnections(Statement statement, Connection connection) {
+    private void closeConnections(Statement statement, Connection connection) {
         if (statement != null) {
             try {
                 statement.close();

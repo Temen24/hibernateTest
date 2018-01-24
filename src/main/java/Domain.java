@@ -1,4 +1,3 @@
-import business_logic.Util;
 import entity.Contact;
 import entity.Project;
 import entity.User;
@@ -9,8 +8,8 @@ import service.UserProjService;
 import service.UserService;
 
 import java.sql.Date;
-import java.sql.SQLException;
 import java.util.Calendar;
+import java.util.List;
 
 public class Domain {
     public static void main(String[] args) {
@@ -40,9 +39,27 @@ public class Domain {
         userProj.setUserID(user.getId());
         userProj.setProjID(project.getId());
 
-        contactService.add(contact);
-        projectService.add(project);
-        userProjService.add(userProj);
-        userService.add(user);
+//        contactService.add(contact);
+//        projectService.add(project);
+//        userProjService.add(userProj);
+//        userService.add(user);
+
+        List<Contact> contacts = contactService.getAll();
+        List<Project> projects = projectService.getAll();
+        List<User> users = userService.getAll();
+        List<UserProj> userProjs = userProjService.getAll();
+        
+        for (Contact a : contacts) {
+            System.out.println(a);
+        }
+        for (Project a : projects) {
+            System.out.println(a);
+        }
+        for (User a : users) {
+            System.out.println(a);
+        }
+        for (UserProj a : userProjs) {
+            System.out.println(a);
+        }
     }
 }

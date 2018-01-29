@@ -1,7 +1,6 @@
 import entity.Contact;
 import entity.Project;
 import entity.User;
-import entity.UserProj;
 import service.ContactService;
 import service.ProjectService;
 import service.UserProjService;

@@ -2,7 +2,6 @@ package service;
 
 import business_logic.Util;
 import dao.UserProjDAO;
-import entity.UserProj;
 import logger.CustomLog;
 
 import java.sql.*;

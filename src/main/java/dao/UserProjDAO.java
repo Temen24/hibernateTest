@@ -1,7 +1,5 @@
 package dao;
 
-import entity.UserProj;
-
 import java.util.List;
 
 public interface UserProjDAO {

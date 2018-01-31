@@ -1,12 +1,35 @@
 package entity;
 
+import javax.persistence.*;
 import java.sql.Date;
+import java.util.Set;
 
+@Entity
+@Table(name = "USER")
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(name = "NAME")
     private String name;
+
+    @Column(name = "OS")
     private String os;
+
+    @Column(name = "BIRTHDAY")
     private Date birthday;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Contact contact;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "USER_PROJ",
+            joinColumns = @JoinColumn(name = "USER_ID"),
+            inverseJoinColumns = @JoinColumn(name = "PROJECT_ID")
+    )
+    private Set<Project> projects;
 
     public User(){
 
@@ -42,6 +65,22 @@ public class User {
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
+    }
+
+    public Contact getContact() {
+        return contact;
+    }
+
+    public void setContact(Contact contact) {
+        this.contact = contact;
+    }
+
+    public Set<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(Set<Project> projects) {
+        this.projects = projects;
     }
 
     @Override

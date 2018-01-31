@@ -1,11 +1,24 @@
 package entity;
 
+
+import javax.persistence.*;
+import java.util.Set;
+
+@Entity
+@Table(name = "PROJECT")
 public class Project {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(name = "TITLE")
     private String title;
 
-    public Project(){
+    @ManyToMany(mappedBy = "projects")
+    private Set<User> users;
+
+    public Project() {
 
     }
 
@@ -25,22 +38,12 @@ public class Project {
         this.title = title;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Project project = (Project) o;
-
-        if (id != project.id) return false;
-        return title != null ? title.equals(project.title) : project.title == null;
+    public Set<User> getUsers() {
+        return users;
     }
 
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + (title != null ? title.hashCode() : 0);
-        return result;
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 
     @Override

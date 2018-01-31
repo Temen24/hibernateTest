@@ -1,8 +1,20 @@
 package entity;
 
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "CONTACT")
 public class Contact {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(name = "PHONE")
     private String phone;
+
+    @Column(name = "VK_URL")
     private String vkUrl;
 
     public Contact(){
@@ -31,26 +43,6 @@ public class Contact {
 
     public void setVkUrl(String vkUrl) {
         this.vkUrl = vkUrl;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Contact contact = (Contact) o;
-
-        if (id != contact.id) return false;
-        if (phone != null ? !phone.equals(contact.phone) : contact.phone != null) return false;
-        return vkUrl != null ? vkUrl.equals(contact.vkUrl) : contact.vkUrl == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + (phone != null ? phone.hashCode() : 0);
-        result = 31 * result + (vkUrl != null ? vkUrl.hashCode() : 0);
-        return result;
     }
 
     @Override

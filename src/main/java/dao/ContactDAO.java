@@ -10,6 +10,7 @@ public interface ContactDAO {
     void add(Contact contact) throws SQLException;
 
     List<Contact> getAll() throws SQLException;
+
     Contact getById(int id) throws SQLException;
 
     void update(Contact contact) throws SQLException;

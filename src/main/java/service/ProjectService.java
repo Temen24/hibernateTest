@@ -1,142 +1,69 @@
 package service;
 
-import business_logic.Util;
+import business_logic.SessionUtil;
 import dao.ProjectDAO;
 import entity.Project;
-import logger.CustomLog;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
 
-import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
-public class ProjectService extends Util implements ProjectDAO {
-
-    private Connection connection = getConnection();
+public class ProjectService extends SessionUtil implements ProjectDAO {
 
     @Override
     public void add(Project project) {
-        PreparedStatement ps = null;
-        String sql = "INSERT INTO PROJECT (ID, TITLE) VALUES (?, ?)";
-        try {
-            ps = connection.prepareStatement(sql);
-            ps.setInt(1, project.getId());
-            ps.setString(2, project.getTitle());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            CustomLog.log("Add project error", e);
-        } finally {
-            closeConnections(ps, connection);
-        }
+        openTransactionSession();
+        Session session = getSession();
+        session.save(project);
+        closeTransactionSesstion();
     }
 
     @Override
     public List<Project> getAll() {
-        List<Project> projectList = new ArrayList<>();
-        String sql = "SELECT ID, TITLE FROM PROJECT";
-        Statement statement = null;
+        openTransactionSession();
 
-        try {
-            statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
-            while (resultSet.next()) {
-                Project project = new Project();
-                project.setId(resultSet.getInt("ID"));
-                project.setTitle(resultSet.getString("TITLE"));
-                projectList.add(project);
-            }
-        } catch (SQLException e) {
-            CustomLog.log("Get all projects error", e);
-        } finally {
-            closeConnections(statement, connection);
-        }
+        String sql = "SELECT * FROM PROJECT";
+
+        Session session = getSession();
+        Query query = session.createNativeQuery(sql).addEntity(Project.class);
+        List<Project> projectList = query.list();
+
+        closeTransactionSesstion();
+
         return projectList;
     }
 
     @Override
     public Project getById(int id) {
-        Project project = new Project();
-        String sql = "SELECT ID, TITLE FROM PROJECT WHERE ID=?";
-        PreparedStatement ps = null;
-        try {
-            ps = connection.prepareStatement(sql);
-            ps.setInt(1, id);
+        openTransactionSession();
 
-            ResultSet resultSet = ps.executeQuery();
+        String sql = "SELECT * FROM PROJECT WHERE ID=:id";
+        Session session = getSession();
+        Query query = session.createNativeQuery(sql).addEntity(Project.class);
+        Project project = (Project) query.getSingleResult();
 
-            project.setId(resultSet.getInt("ID"));
-            project.setTitle((resultSet.getString("TITLE")));
-        } catch (SQLException e) {
-            CustomLog.log("Get project error", e);
-        } finally {
-            closeConnections(ps, connection);
-        }
+        closeTransactionSesstion();
+
         return project;
     }
 
     @Override
     public void update(Project project) {
-        PreparedStatement ps = null;
-        String sql = "UPDATE PROJECT SET TITLE=? WHERE ID=?";
-        try {
-            ps = connection.prepareStatement(sql);
+        openTransactionSession();
 
-            ps.setString(1, project.getTitle());
-            ps.setInt(2, project.getId());
+        Session session = getSession();
+        session.update(project);
 
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            CustomLog.log("Update project error", e);
-        } finally {
-            closeConnections(ps, connection);
-        }
+        closeTransactionSesstion();
     }
 
     @Override
     public void delete(Project project) {
-        PreparedStatement ps = null;
-        String sql = "DELETE FROM PROJECT WHERE ID=?";
-        try {
-            ps = connection.prepareStatement(sql);
-            ps.setInt(1, project.getId());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            CustomLog.log("Delete project error", e);
-        } finally {
-            closeConnections(ps, connection);
-        }
-    }
+        openTransactionSession();
 
-    private void closeConnections(PreparedStatement ps, Connection connection) {
-        if (ps != null) {
-            try {
-                ps.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        if (connection != null) {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+        Session session = getSession();
+        session.remove(project);
 
-    private void closeConnections(Statement statement, Connection connection) {
-        if (statement != null) {
-            try {
-                statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        if (connection != null) {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        closeTransactionSesstion();
     }
 }

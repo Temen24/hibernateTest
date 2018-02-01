@@ -1,3 +1,5 @@
+package domain;
+
 import entity.Contact;
 import entity.Project;
 import entity.User;

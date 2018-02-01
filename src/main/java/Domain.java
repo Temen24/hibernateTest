@@ -1,32 +1,35 @@
-import business_logic.HibernateUtil;
 import entity.Contact;
 import entity.Project;
 import entity.User;
-import service.ContactService;
-import service.ProjectService;
-import service.UserService;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import repository.ContactRepository;
+import repository.ProjectRepository;
+import repository.UserRepository;
 
-import java.io.IOException;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.LogManager;
 
 public class Domain {
     public static void main(String[] args) {
-        ContactService contactService = new ContactService();
-        ProjectService projectService = new ProjectService();
-        UserService userService = new UserService();
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+
+        ContactRepository contactRepository = context.getBean(ContactRepository.class);
+        ProjectRepository projectRepository = context.getBean(ProjectRepository.class);
+        UserRepository userRepository = context.getBean(UserRepository.class);
 
         Contact contact = new Contact();
+        contact.setId(1L);
         contact.setPhone("+4612312");
         contact.setVkUrl("http://vk.com/durov");
 
         Project project = new Project();
+        project.setId(1L);
         project.setTitle("VK");
 
         User user = new User();
+        user.setId(1L);
         user.setName("Pasha");
         Calendar calendar = Calendar.getInstance();
         calendar.set(1981, Calendar.JANUARY, 24);
@@ -42,10 +45,10 @@ public class Domain {
         projects.add(project);
         user.setProjects(projects);
 
-        contactService.add(contact);
-        userService.add(user);
-        projectService.add(project);
+        contactRepository.save(contact);
+        projectRepository.save(project);
+        userRepository.save(user);
 
-        HibernateUtil.shutdown();
+        System.out.println(userRepository.findByOs("Mac"));
     }
 }
